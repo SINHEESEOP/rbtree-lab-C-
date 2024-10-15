@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+// rbree.c 파일을 구현할 함수의 인터페이스 파일.
+
 typedef enum { RBTREE_RED, RBTREE_BLACK } color_t;
 
 typedef int key_t;

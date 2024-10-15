@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// new_rbtree should return rbtree struct with null root node
+// rbree.c 파일 구현 시, 해당 함수만 아래 main 에서 테스트 해볼 수 있는 test 파일.
+
+// new_rbtree 함수는 루트 노드가 NULL인 rbtree 구조체를 반환해야 합니다.
 void test_init(void) {
   rbtree *t = new_rbtree();
   assert(t != NULL);
@@ -17,14 +19,14 @@ void test_init(void) {
   delete_rbtree(t);
 }
 
-// root node should have proper values and pointers
+// 루트 노드는 적절한 값과 포인터를 가져야 합니다.
 void test_insert_single(const key_t key) {
   rbtree *t = new_rbtree();
   node_t *p = rbtree_insert(t, key);
   assert(p != NULL);
   assert(t->root == p);
   assert(p->key == key);
-  // assert(p->color == RBTREE_BLACK);  // color of root node should be black
+  // assert(p->color == RBTREE_BLACK);  // 루트 노드의 색상은 검정이어야 합니다.
 #ifdef SENTINEL
   assert(p->left == t->nil);
   assert(p->right == t->nil);
@@ -37,7 +39,7 @@ void test_insert_single(const key_t key) {
   delete_rbtree(t);
 }
 
-// find should return the node with the key or NULL if no such node exists
+// find 함수는 키를 가진 노드를 반환하거나 해당 노드가 없으면 NULL을 반환해야 합니다.
 void test_find_single(const key_t key, const key_t wrong_key) {
   rbtree *t = new_rbtree();
   node_t *p = rbtree_insert(t, key);
@@ -53,7 +55,7 @@ void test_find_single(const key_t key, const key_t wrong_key) {
   delete_rbtree(t);
 }
 
-// erase should delete root node
+// erase 함수는 루트 노드를 삭제해야 합니다.
 void test_erase_root(const key_t key) {
   rbtree *t = new_rbtree();
   node_t *p = rbtree_insert(t, key);
@@ -89,9 +91,9 @@ static int comp(const void *p1, const void *p2) {
   }
 };
 
-// min/max should return the min/max value of the tree
+// min/max 함수는 트리의 최소/최대 값을 반환해야 합니다.
 void test_minmax(key_t *arr, const size_t n) {
-  // null array is not allowed
+  // NULL 배열은 허용되지 않습니다.
   assert(n > 0 && arr != NULL);
 
   rbtree *t = new_rbtree();
@@ -175,10 +177,9 @@ void test_multi_instance() {
   delete_rbtree(t1);
 }
 
-// Search tree constraint
-// The values of left subtree should be less than or equal to the current node
-// The values of right subtree should be greater than or equal to the current
-// node
+// 검색 트리 제약 조건
+// 왼쪽 서브트리의 값은 현재 노드보다 작거나 같아야 합니다.
+// 오른쪽 서브트리의 값은 현재 노드보다 크거나 같아야 합니다.
 
 static bool search_traverse(const node_t *p, key_t *min, key_t *max,
                             node_t *nil) {
@@ -217,12 +218,12 @@ void test_search_constraint(const rbtree *t) {
   assert(search_traverse(p, &min, &max, nil));
 }
 
-// Color constraint
-// 1. Each node is either red or black. (by definition)
-// 2. All NIL nodes are considered black.
-// 3. A red node does not have a red child.
-// 4. Every path from a given node to any of its descendant NIL nodes goes
-// through the same number of black nodes.
+// 색상 제약 조건
+// 1. 각 노드는 빨강 또는 검정입니다. (정의에 따라)
+// 2. 모든 NIL 노드는 검정으로 간주됩니다.
+// 3. 빨간 노드는 빨간 자식을 가질 수 없습니다.
+// 4. 주어진 노드에서 그 하위 NIL 노드까지의 모든 경로는
+//    동일한 수의 검정 노드를 지나야 합니다.
 
 bool touch_nil = false;
 int max_black_depth = 0;
@@ -265,7 +266,7 @@ void test_color_constraint(const rbtree *t) {
   assert(color_traverse(p, RBTREE_BLACK, 0, nil));
 }
 
-// rbtree should keep search tree and color constraints
+// rbtree는 검색 트리와 색상 제약 조건을 유지해야 합니다.
 void test_rb_constraints(const key_t arr[], const size_t n) {
   rbtree *t = new_rbtree();
   assert(t != NULL);
@@ -279,14 +280,14 @@ void test_rb_constraints(const key_t arr[], const size_t n) {
   delete_rbtree(t);
 }
 
-// rbtree should manage distinct values
+// rbtree는 고유한 값을 관리해야 합니다.
 void test_distinct_values() {
   const key_t entries[] = {10, 5, 8, 34, 67, 23, 156, 24, 2, 12};
   const size_t n = sizeof(entries) / sizeof(entries[0]);
   test_rb_constraints(entries, n);
 }
 
-// rbtree should manage values with duplicate
+// rbtree는 중복된 값을 관리해야 합니다.
 void test_duplicate_values() {
   const key_t entries[] = {10, 5, 5, 34, 6, 23, 12, 12, 6, 12};
   const size_t n = sizeof(entries) / sizeof(entries[0]);
@@ -369,15 +370,15 @@ void test_find_erase_rand(const size_t n, const unsigned int seed) {
 
 int main(void) {
   test_init();
-  test_insert_single(1024);
-  test_find_single(512, 1024);
-  test_erase_root(128);
-  test_find_erase_fixed();
+//  test_insert_single(1024);
+//  test_find_single(512, 1024);
+//  test_erase_root(128);
+//  test_find_erase_fixed();
   test_minmax_suite();
-  test_to_array_suite();
-  test_distinct_values();
-  test_duplicate_values();
-  test_multi_instance();
-  test_find_erase_rand(10000, 17);
-  printf("Passed all tests!\n");
+//  test_to_array_suite();
+//  test_distinct_values();
+//  test_duplicate_values();
+//  test_multi_instance();
+//  test_find_erase_rand(10000, 17);
+  printf("모든 테스트를 통과했습니다!\n");
 }

@@ -1,4 +1,8 @@
-.PHONY: help build test
+## Root Makefile
+
+.PHONY: help build test clean all
+
+all: build
 
 help:
 # http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
@@ -11,9 +15,11 @@ build: ## Build executables
 test:
 test: ## Test rbtree implementation
 	$(MAKE) -C test test
-	
+
 clean:
-clean: ## Clear build environment
+clean: ## Clear build environmentm
 	$(MAKE) -C src clean
 	$(MAKE) -C test clean
+
+
 
